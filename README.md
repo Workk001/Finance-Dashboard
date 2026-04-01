@@ -2,7 +2,7 @@
 
 A finance dashboard for tracking income, expenses, and spending patterns. Built as a screening assignment for the Frontend Developer Intern role at Zorvyn FinTech.
 
-**Live Demo** -- _deploy URL will be added after Vercel deployment_
+**Live Demo** -- https://findashzorvyn.netlify.app/
 
 ---
 
