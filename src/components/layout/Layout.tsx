@@ -1,11 +1,21 @@
+import { useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { MobileNav } from "./MobileNav";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useStore } from "@/store/useStore";
 
 export function Layout() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (!initialized.current && !isDesktop) {
+      useStore.setState({ sidebarOpen: false });
+    }
+    initialized.current = true;
+  }, [isDesktop]);
 
   return (
     <div className="flex min-h-screen bg-background">

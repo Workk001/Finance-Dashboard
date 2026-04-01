@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -86,8 +87,14 @@ export function TransactionForm({ open, onOpenChange, editingTransaction }: Tran
 
     if (editingTransaction) {
       updateTransaction(editingTransaction.id, data);
+      toast.success("Transaction updated", {
+        description: `${data.description} has been updated.`,
+      });
     } else {
       addTransaction(data);
+      toast.success("Transaction added", {
+        description: `${data.description} -- ${data.type === "income" ? "+" : "-"}${data.amount.toLocaleString("en-IN")} INR`,
+      });
     }
 
     onOpenChange(false);

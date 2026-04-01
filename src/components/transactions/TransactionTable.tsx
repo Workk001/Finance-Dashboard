@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { toast } from "sonner";
 import { ArrowUpDown, Pencil, Trash2 } from "lucide-react";
 import { useStore } from "@/store/useStore";
 import { useRole } from "@/hooks/useRole";
@@ -5,6 +7,13 @@ import { useFilteredTransactions } from "@/hooks/useFilteredTransactions";
 import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -26,6 +35,16 @@ export function TransactionTable({ onEdit }: TransactionTableProps) {
   const deleteTransaction = useStore((s) => s.deleteTransaction);
   const { paginated, totalPages, totalCount } = useFilteredTransactions();
   const { canEdit, canDelete, isViewer } = useRole();
+  const [deleteTarget, setDeleteTarget] = useState<Transaction | null>(null);
+
+  const handleDelete = () => {
+    if (!deleteTarget) return;
+    deleteTransaction(deleteTarget.id);
+    toast.success("Transaction deleted", {
+      description: `"${deleteTarget.description}" has been removed.`,
+    });
+    setDeleteTarget(null);
+  };
 
   const handleSort = (key: FilterState["sortBy"]) => {
     if (filters.sortBy === key) {
@@ -96,7 +115,7 @@ export function TransactionTable({ onEdit }: TransactionTableProps) {
                         </Tooltip>
                       )}
                       {canDelete ? (
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => deleteTransaction(t.id)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setDeleteTarget(t)}>
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       ) : (
@@ -146,7 +165,7 @@ export function TransactionTable({ onEdit }: TransactionTableProps) {
                   <Button variant="outline" size="sm" className="text-xs h-7" onClick={() => onEdit(t)}>
                     <Pencil className="h-3 w-3 mr-1" /> Edit
                   </Button>
-                  <Button variant="outline" size="sm" className="text-xs h-7 text-destructive" onClick={() => deleteTransaction(t.id)}>
+                  <Button variant="outline" size="sm" className="text-xs h-7 text-destructive" onClick={() => setDeleteTarget(t)}>
                     <Trash2 className="h-3 w-3 mr-1" /> Delete
                   </Button>
                 </div>
@@ -201,6 +220,24 @@ export function TransactionTable({ onEdit }: TransactionTableProps) {
           </div>
         </div>
       )}
+      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete Transaction</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete &quot;{deleteTarget?.description}&quot;? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="outline" size="sm" onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" size="sm" onClick={handleDelete}>
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

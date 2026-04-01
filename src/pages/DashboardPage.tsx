@@ -4,6 +4,7 @@ import { useStore } from "@/store/useStore";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
 import { BalanceTrendChart } from "@/components/dashboard/BalanceTrendChart";
 import { SpendingBreakdownChart } from "@/components/dashboard/SpendingBreakdownChart";
+import { RecentTransactions } from "@/components/dashboard/RecentTransactions";
 import { DashboardSkeleton } from "@/components/common/LoadingSkeleton";
 
 export function DashboardPage() {
@@ -32,6 +33,8 @@ export function DashboardPage() {
         <BalanceTrendChart />
         <SpendingBreakdownChart />
       </div>
+
+      <RecentTransactions />
     </motion.div>
   );
 }

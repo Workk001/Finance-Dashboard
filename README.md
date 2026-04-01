@@ -54,7 +54,7 @@ A full data table on desktop that transforms into stacked cards on mobile. Inclu
 
 A dropdown in the header switches between Admin and Viewer. The role state drives conditional rendering throughout the app:
 
-- **Admin** -- full CRUD. "Add Transaction" button in the page header. Edit and delete icons on every row. Add/edit opens a Dialog with form validation (required fields, positive amount).
+- **Admin** -- full CRUD. "Add Transaction" button in the page header. Edit and delete icons on every row. Add/edit opens a Dialog with form validation (required fields, positive amount). Delete requires explicit confirmation. All CRUD operations show toast notifications confirming the action.
 - **Viewer** -- action buttons are rendered but disabled, with tooltips explaining the restriction ("Switch to Admin to edit"). This is a deliberate design choice: users should understand what the product offers, not be confused by missing UI. Disabled states communicate restrictions more clearly than hidden elements.
 
 Permissions are encapsulated in a `useRole()` hook that returns `{ canCreate, canEdit, canDelete, isAdmin, isViewer }`. Components consume this hook, keeping permission logic out of rendering code.
@@ -71,6 +71,10 @@ Six computed insight cards and a grouped bar chart, all derived dynamically from
 - Overall savings rate with total saved amount
 
 The bar chart compares monthly income vs. expenses side by side.
+
+### Dashboard
+
+Summary cards for Total Balance, Income, Expenses, and Savings Rate with month-over-month trend indicators. Below the cards, an area chart for balance trend and an interactive donut chart for spending breakdown (clicking a category navigates to filtered transactions). A recent activity feed at the bottom shows the five latest transactions with a link to the full list.
 
 ### Dark Mode
 
